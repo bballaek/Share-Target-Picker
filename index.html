@@ -4,16 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
     <title>Share Target Picker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <img src="https://i.imgur.com/6DEiHfH.png" alt="Logo" class="logo">
-        <h1>Share Target Picker</h1>
-        <a href="https://developers.line.biz/flex-simulator/" target="_blank">Flex simulator: https://developers.line.biz/flex-simulator/</a>
-        <textarea id="flexJson" placeholder="Paste your Flex JSON Ctrl+V here"></textarea>
-        <button onclick="sendShare()">Submit and Share</button>
+  <div class="container">
+    <div class="header">
+      <img src="img/logo.png" alt="LINE Logo" class="logo">
+      <h1>LINE Share Target Picker</h1>
+      <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="flex-link">
+        Flex Simulator
+      </a>
     </div>
+    
+    <div class="form-group">
+      <label for="flexJson">Flex Message JSON</label>
+      <textarea id="flexJson" placeholder="วาง Flex JSON (Ctrl+V) ที่นี่"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label for="altText">Alternative Text</label>
+      <input type="text" id="altText" placeholder="ข้อความสำรอง">
+    </div>
+    
+    <button id="btnShare" class="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+      แชร์ข้อความ
+    </button>
+    
+    <button id="btnLogOut" class="button button-secondary" style="display:none;">
+      ออกจากระบบ
+    </button>
+    
+    <div id="status"></div>
+  </div>
+  
+  <div id="toast" class="toast"></div>
+   
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="script.js"></script>
 </body>
