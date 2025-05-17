@@ -91,7 +91,7 @@ async function initializeApp() {
             
             const loginButton = document.createElement('button');
             loginButton.className = 'button';
-            loginButton.innerHTML = 'เข้าสู่ระบบด้วย LINE';
+            loginButton.innerHTML = 'Login LINE';
             loginButton.onclick = () => liff.login();
             
             container.insertBefore(loginButton, statusDiv);
