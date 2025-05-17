@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced LINE Flex Message Generator</title>
+    <title>Enhanced LINE Flex Message Generator with Templates</title>
     <style>
         body {
             font-family: 'Prompt', Arial, sans-serif;
@@ -134,7 +134,7 @@
         }
         .preview-hero img {
             width: 100%;
-            height: 350px;
+            height: 200px;
             object-fit: cover;
         }
         .preview-body {
@@ -222,6 +222,54 @@
             margin-bottom: 20px;
             display: none;
         }
+        .template-selection {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .template-option {
+            width: 30%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .template-option.selected {
+            border-color: #004080;
+            box-shadow: 0 0 15px rgba(0,64,128,0.3);
+        }
+        .template-thumbnail {
+            height: 150px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .template-thumbnail img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .template-label {
+            padding: 10px;
+            text-align: center;
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        /* Template 3 specific styles */
+        .template3-preview {
+            height: 400px;
+        }
     </style>
 </head>
 <body>
@@ -241,106 +289,230 @@
         </div>
         
         <div class="tab-content active" id="editor-content">
-            <form id="flex-form">
-                <div class="form-group">
-                    <label for="schoolName">ชื่อโรงเรียน/องค์กร</label>
-                    <input type="text" id="schoolName" value="Saint Gabriel's College" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="announcementTitle">หัวข้อประกาศ</label>
-                    <input type="text" id="announcementTitle" value="ประกาศห้องเรียน ม.1/7" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="headerColor">สีพื้นหลังส่วนหัว</label>
-                    <div class="color-picker">
-                        <input type="color" id="headerColor" value="#004080">
-                        <input type="text" id="headerColorText" class="color-text" value="#004080">
+            <h2>เลือกรูปแบบ</h2>
+            <div class="template-selection">
+                <div class="template-option selected" data-template="template1">
+                    <div class="template-thumbnail">
+                        <img src="/api/placeholder/180/100" alt="Template 1">
                     </div>
+                    <div class="template-label">แบบที่ 1 - โลโก้+รูปภาพ</div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="logoUrl">ลิงก์รูปโลโก้</label>
-                    <input type="url" id="logoUrl" value="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="imageUrl">ลิงก์รูปภาพหลัก</label>
-                    <input type="url" id="imageUrl" value="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="bodyTitle">หัวข้อเนื้อหา</label>
-                    <input type="text" id="bodyTitle" value="รายละเอียดประกาศ" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="bodyTitleColor">สีหัวข้อเนื้อหา</label>
-                    <div class="color-picker">
-                        <input type="color" id="bodyTitleColor" value="#004080">
-                        <input type="text" id="bodyTitleColorText" class="color-text" value="#004080">
+                <div class="template-option" data-template="template2">
+                    <div class="template-thumbnail">
+                        <img src="/api/placeholder/180/100" alt="Template 2">
                     </div>
+                    <div class="template-label">แบบที่ 2 - กิจกรรม</div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="description">รายละเอียด</label>
-                    <textarea id="description" rows="4" required>ใส่รายละเอียดข่าวสารที่ต้องการประกาศที่นี่ เช่น กิจกรรม, กำหนดการ, ข้อมูลสำคัญ</textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="bodyColor">สีพื้นหลังส่วนเนื้อหา</label>
-                    <div class="color-picker">
-                        <input type="color" id="bodyColor" value="#f7f7f7">
-                        <input type="text" id="bodyColorText" class="color-text" value="#f7f7f7">
+                <div class="template-option" data-template="template3">
+                    <div class="template-thumbnail">
+                        <img src="/api/placeholder/180/100" alt="Template 3">
                     </div>
+                    <div class="template-label">แบบที่ 3 - รูปภาพเดี่ยว</div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="date">วันที่</label>
-                    <input type="text" id="date" value="16 พฤษภาคม 2568">
-                </div>
-                
-                <div class="form-group">
-                    <label for="location">สถานที่</label>
-                    <input type="text" id="location" value="อาคารเรียน Saint Gabriel's College">
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="hasButton" checked>
-                    <label for="hasButton">เพิ่มปุ่มรายละเอียดเพิ่มเติม</label>
-                </div>
-                
-                <div id="buttonUrlContainer">
+            </div>
+            
+            <!-- Template 1 Form -->
+            <div class="form-section active" id="template1-form">
+                <form id="flex-form-template1">
                     <div class="form-group">
-                        <label for="buttonLabel">ข้อความบนปุ่ม</label>
-                        <input type="text" id="buttonLabel" value="รายละเอียดเพิ่มเติม">
+                        <label for="schoolName">ชื่อโรงเรียน/องค์กร</label>
+                        <input type="text" id="schoolName" value="Saint Gabriel's College" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="buttonUrl">URL สำหรับปุ่ม</label>
-                        <input type="url" id="buttonUrl" value="https://example.com/more-details">
+                        <label for="announcementTitle">หัวข้อประกาศ</label>
+                        <input type="text" id="announcementTitle" value="ประกาศห้องเรียน ม.1/7" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="buttonColor">สีปุ่ม</label>
+                        <label for="headerColor">สีพื้นหลังส่วนหัว</label>
                         <div class="color-picker">
-                            <input type="color" id="buttonColor" value="#004080">
-                            <input type="text" id="buttonColorText" class="color-text" value="#004080">
+                            <input type="color" id="headerColor" value="#004080">
+                            <input type="text" id="headerColorText" class="color-text" value="#004080">
                         </div>
                     </div>
-                </div>
-                
-                <button type="button" id="generateButton">สร้าง Flex Message</button>
-            </form>
+                    
+                    <div class="form-group">
+                        <label for="logoUrl">ลิงก์รูปโลโก้</label>
+                        <input type="url" id="logoUrl" value="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="imageUrl">ลิงก์รูปภาพหลัก</label>
+                        <input type="url" id="imageUrl" value="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bodyTitle">หัวข้อเนื้อหา</label>
+                        <input type="text" id="bodyTitle" value="รายละเอียดประกาศ" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bodyTitleColor">สีหัวข้อเนื้อหา</label>
+                        <div class="color-picker">
+                            <input type="color" id="bodyTitleColor" value="#004080">
+                            <input type="text" id="bodyTitleColorText" class="color-text" value="#004080">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">รายละเอียด</label>
+                        <textarea id="description" rows="4" required>ใส่รายละเอียดข่าวสารที่ต้องการประกาศที่นี่ เช่น กิจกรรม, กำหนดการ, ข้อมูลสำคัญ</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bodyColor">สีพื้นหลังส่วนเนื้อหา</label>
+                        <div class="color-picker">
+                            <input type="color" id="bodyColor" value="#f7f7f7">
+                            <input type="text" id="bodyColorText" class="color-text" value="#f7f7f7">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">วันที่</label>
+                        <input type="text" id="date" value="16 พฤษภาคม 2568">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">สถานที่</label>
+                        <input type="text" id="location" value="อาคารเรียน Saint Gabriel's College">
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="hasButton" checked>
+                        <label for="hasButton">เพิ่มปุ่มรายละเอียดเพิ่มเติม</label>
+                    </div>
+                    
+                    <div id="buttonUrlContainer">
+                        <div class="form-group">
+                            <label for="buttonLabel">ข้อความบนปุ่ม</label>
+                            <input type="text" id="buttonLabel" value="รายละเอียดเพิ่มเติม">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="buttonUrl">URL สำหรับปุ่ม</label>
+                            <input type="url" id="buttonUrl" value="https://example.com/more-details">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="buttonColor">สีปุ่ม</label>
+                            <div class="color-picker">
+                                <input type="color" id="buttonColor" value="#004080">
+                                <input type="text" id="buttonColorText" class="color-text" value="#004080">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Template 2 Form -->
+            <div class="form-section" id="template2-form">
+                <form id="flex-form-template2">
+                    <div class="form-group">
+                        <label for="template2-headerTitle">หัวข้อส่วนหัว</label>
+                        <input type="text" id="template2-headerTitle" value="กิจกรรม" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-orgName">ชื่อโรงเรียน/องค์กร</label>
+                        <input type="text" id="template2-orgName" value="Saint Gabriel's College" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-headerColor">สีพื้นหลังส่วนหัว</label>
+                        <div class="color-picker">
+                            <input type="color" id="template2-headerColor" value="#0066CC">
+                            <input type="text" id="template2-headerColorText" class="color-text" value="#0066CC">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-imageUrl">ลิงก์รูปภาพหลัก</label>
+                        <input type="url" id="template2-imageUrl" value="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-eventName">ชื่องาน</label>
+                        <input type="text" id="template2-eventName" value="วันวิชาการ 2025" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-date">วันที่</label>
+                        <input type="text" id="template2-date" value="25 พฤษภาคม 2568">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-location">สถานที่</label>
+                        <input type="text" id="template2-location" value="หอประชุมใหญ่">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-description">รายละเอียดงาน</label>
+                        <textarea id="template2-description" rows="4" required>เชิญชวนทุกคนเข้าร่วมงานวิชาการ เปิดโลกแห่งการเรียนรู้</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-buttonLabel">ข้อความบนปุ่ม</label>
+                        <input type="text" id="template2-buttonLabel" value="รายละเอียดเพิ่มเติม">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-buttonUrl">URL สำหรับปุ่ม</label>
+                        <input type="url" id="template2-buttonUrl" value="https://example.com/event-details">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template2-buttonColor">สีปุ่ม</label>
+                        <div class="color-picker">
+                            <input type="color" id="template2-buttonColor" value="#0066CC">
+                            <input type="text" id="template2-buttonColorText" class="color-text" value="#0066CC">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Template 3 Form -->
+            <div class="form-section" id="template3-form">
+                <form id="flex-form-template3">
+                    <div class="form-group">
+                        <label for="template3-imageUrl">ลิงก์รูปภาพ</label>
+                        <input type="url" id="template3-imageUrl" value="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="template3-aspectRatio">อัตราส่วนรูปภาพ</label>
+                        <select id="template3-aspectRatio">
+                            <option value="1:1">1:1 (สี่เหลี่ยมจัตุรัส)</option>
+                            <option value="4:3">4:3</option>
+                            <option value="16:9">16:9 (กว้าง)</option>
+                            <option value="4:5" selected>4:5 (ตั้ง)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="template3-hasAction" checked>
+                        <label for="template3-hasAction">เพิ่มการกดที่รูปภาพ</label>
+                    </div>
+                    
+                    <div id="template3-actionUrlContainer">
+                        <div class="form-group">
+                            <label for="template3-actionUrl">URL เมื่อกดที่รูปภาพ</label>
+                            <input type="url" id="template3-actionUrl" value="https://drive.google.com/file/d/1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9/view?usp=sharing">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <button type="button" id="generateButton">สร้าง Flex Message</button>
         </div>
         
+        <!-- Preview Tab -->
         <div class="tab-content" id="preview-content">
-            <div class="flex-preview">
+            <!-- Template 1 Preview -->
+            <div class="flex-preview" id="preview-template1">
                 <div class="preview-header" id="preview-header">
                     <div class="preview-logo">
-                        <img id="preview-logo-img" src="https://share-target-picker.vercel.app/img/logo.png" alt="Logo">
-
+                        <img id="preview-logo-img" src="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" alt="Logo">
                     </div>
                     <div class="preview-header-text">
                         <div class="preview-title" id="preview-title">Saint Gabriel's College</div>
@@ -366,6 +538,37 @@
                     <div class="preview-button" id="preview-button">รายละเอียดเพิ่มเติม</div>
                 </div>
             </div>
+            
+            <!-- Template 2 Preview -->
+            <div class="flex-preview" id="preview-template2" style="display: none;">
+                <div class="preview-header" style="flex-direction: column; padding: 15px;" id="preview-header-template2">
+                    <div class="preview-title" id="preview-title-template2">กิจกรรม</div>
+                    <div class="preview-subtitle" id="preview-subtitle-template2" style="margin-top: 5px;">Saint Gabriel's College</div>
+                </div>
+                
+                <div class="preview-hero">
+                    <img id="preview-hero-img-template2" src="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" alt="Hero Image" style="height: 150px;">
+                </div>
+                
+                <div class="preview-body" style="background-color: white;" id="preview-body-template2">
+                    <div class="preview-body-title" id="event-name-template2" style="color: #333;">ชื่องาน: วันวิชาการ 2025</div>
+                    <div class="preview-metadata" style="margin-top: 15px;">
+                        <div id="preview-date-location-template2">วันที่: 25 พฤษภาคม 2568<br>สถานที่: หอประชุมใหญ่</div>
+                    </div>
+                    <div class="preview-description" id="preview-description-template2" style="margin-top: 15px;">รายละเอียด: เชิญชวนทุกคนเข้าร่วมงานวิชาการ เปิดโลกแห่งการเรียนรู้</div>
+                </div>
+                
+                <div class="preview-footer" id="preview-footer-template2">
+                    <div class="preview-button" id="preview-button-template2">รายละเอียดเพิ่มเติม</div>
+                </div>
+            </div>
+            
+            <!-- Template 3 Preview -->
+            <div class="flex-preview template3-preview" id="preview-template3" style="display: none;">
+                <div class="preview-hero" style="height: 100%;">
+                    <img id="preview-hero-img-template3" src="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" alt="Hero Image" style="height: 100%;">
+                </div>
+            </div>
         </div>
         
         <div class="tab-content" id="json-content">
@@ -376,282 +579,521 @@
   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab functionality
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
+    // Current selected template
+    let currentTemplate = 'template1';
+    
+    // Template Selection
+    const templateOptions = document.querySelectorAll('.template-option');
+    const formSections = document.querySelectorAll('.form-section');
+    const previewTemplates = document.querySelectorAll('.flex-preview');
+    
+    templateOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Deselect all templates
+            templateOptions.forEach(t => t.classList.remove('selected'));
             
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    tab.classList.add('active');
-                    document.getElementById(tabId + '-content').classList.add('active');
-                });
+            // Select this template
+            option.classList.add('selected');
+            
+            // Hide all form sections and show the selected one
+            const templateId = option.getAttribute('data-template');
+            currentTemplate = templateId;
+            
+            formSections.forEach(section => {
+                section.classList.remove('active');
             });
+            document.getElementById(`${templateId}-form`).classList.add('active');
             
-            // Color picker synchronization
-            function setupColorPicker(colorId, textId) {
-                const colorPicker = document.getElementById(colorId);
-                const textInput = document.getElementById(textId);
-                
-                colorPicker.addEventListener('input', function() {
-                    textInput.value = this.value;
-                    updatePreview();
-                });
-                
-                textInput.addEventListener('input', function() {
-                    colorPicker.value = this.value;
-                    updatePreview();
-                });
-            }
-            
-            setupColorPicker('headerColor', 'headerColorText');
-            setupColorPicker('bodyTitleColor', 'bodyTitleColorText');
-            setupColorPicker('bodyColor', 'bodyColorText');
-            setupColorPicker('buttonColor', 'buttonColorText');
-            
-            // Button visibility toggle
-            const hasButtonCheckbox = document.getElementById('hasButton');
-            const buttonUrlContainer = document.getElementById('buttonUrlContainer');
-            const previewFooter = document.getElementById('preview-footer');
-            
-            hasButtonCheckbox.addEventListener('change', function() {
-                buttonUrlContainer.style.display = this.checked ? 'block' : 'none';
-                previewFooter.style.display = this.checked ? 'block' : 'none';
-                updatePreview();
+            // Hide all previews and show the selected one
+            previewTemplates.forEach(preview => {
+                preview.style.display = 'none';
             });
+            document.getElementById(`preview-${templateId}`).style.display = 'block';
             
-            // Initial form input setup
-            const inputs = document.querySelectorAll('input, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('input', updatePreview);
-            });
-            
-            // Preview update function
-            function updatePreview() {
-                // Header
-                const headerColor = document.getElementById('headerColor').value;
-                document.getElementById('preview-header').style.backgroundColor = headerColor;
-                
-                document.getElementById('preview-logo-img').src = document.getElementById('logoUrl').value;
-                document.getElementById('preview-title').textContent = document.getElementById('schoolName').value;
-                document.getElementById('preview-subtitle').textContent = document.getElementById('announcementTitle').value;
-                
-                // Hero
-                document.getElementById('preview-hero-img').src = document.getElementById('imageUrl').value;
-                
-                // Body
-                const bodyColor = document.getElementById('bodyColor').value;
-                document.getElementById('preview-body').style.backgroundColor = bodyColor;
-                
-                document.getElementById('preview-body-title').textContent = document.getElementById('bodyTitle').value;
-                document.getElementById('preview-body-title').style.color = document.getElementById('bodyTitleColor').value;
-                
-                document.getElementById('preview-description').textContent = document.getElementById('description').value;
-                document.getElementById('preview-date').textContent = `🗓 วันที่: ${document.getElementById('date').value}`;
-                document.getElementById('preview-location').textContent = `📍 สถานที่: ${document.getElementById('location').value}`;
-                
-                // Footer/Button
-                const hasButton = document.getElementById('hasButton').checked;
-                previewFooter.style.display = hasButton ? 'block' : 'none';
-                
-                if (hasButton) {
-                    document.getElementById('preview-button').textContent = document.getElementById('buttonLabel').value;
-                    document.getElementById('preview-button').style.backgroundColor = document.getElementById('buttonColor').value;
-                }
-            }
-            
-            // Generate JSON function
-            const generateButton = document.getElementById('generateButton');
-            const jsonResult = document.getElementById('jsonResult');
-            
-            generateButton.addEventListener('click', function() {
-                const schoolName = document.getElementById('schoolName').value;
-                const announcementTitle = document.getElementById('announcementTitle').value;
-                const headerColor = document.getElementById('headerColor').value;
-                const logoUrl = document.getElementById('logoUrl').value;
-                const imageUrl = document.getElementById('imageUrl').value;
-                const bodyTitle = document.getElementById('bodyTitle').value;
-                const bodyTitleColor = document.getElementById('bodyTitleColor').value;
-                const description = document.getElementById('description').value;
-                const bodyColor = document.getElementById('bodyColor').value;
-                const date = document.getElementById('date').value;
-                const location = document.getElementById('location').value;
-                const hasButton = hasButtonCheckbox.checked;
-                const buttonLabel = document.getElementById('buttonLabel').value;
-                const buttonUrl = document.getElementById('buttonUrl').value;
-                const buttonColor = document.getElementById('buttonColor').value;
-
-                // Create the bubble object first (for Flex Message Simulator compatibility)
-                const bubble = {
-                    type: "bubble",
-                    header: {
-                        type: "box",
-                        layout: "horizontal",
-                        backgroundColor: headerColor,
-                        paddingAll: "12px",
-                        contents: [
-                            {
-                                type: "box",
-                                layout: "vertical",
-                                width: "20%",
-                                contents: [{ 
-                                    type: "image", 
-                                    url: logoUrl, 
-                                    size: "sm", 
-                                    aspectRatio: "1:1", 
-                                    aspectMode: "fit" 
-                                }]
-                            },
-                            {
-                                type: "box",
-                                layout: "vertical",
-                                width: "80%",
-                                paddingStart: "10px",
-                                contents: [
-                                    { 
-                                        type: "text", 
-                                        text: schoolName, 
-                                        weight: "bold", 
-                                        size: "lg", 
-                                        color: "#ffffff" 
-                                    },
-                                    { 
-                                        type: "text", 
-                                        text: announcementTitle, 
-                                        size: "sm", 
-                                        color: "#ffffff", 
-                                        margin: "sm" 
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    hero: { 
-                        type: "image", 
-                        url: imageUrl, 
-                        size: "full", 
-                        aspectRatio: "4:5", 
-                        aspectMode: "cover" 
-                    },
-                    body: {
-                        type: "box",
-                        layout: "vertical",
-                        backgroundColor: bodyColor,
-                        paddingAll: "15px",
-                        spacing: "md",
-                        contents: [
-                            { 
-                                type: "text", 
-                                text: bodyTitle, 
-                                weight: "bold", 
-                                size: "lg", 
-                                wrap: true, 
-                                color: bodyTitleColor 
-                            },
-                            { 
-                                type: "separator", 
-                                color: bodyTitleColor, 
-                                margin: "sm" 
-                            },
-                            { 
-                                type: "text", 
-                                text: description, 
-                                wrap: true, 
-                                size: "md", 
-                                color: "#666666", 
-                                margin: "md" 
-                            },
-                            { 
-                                type: "text", 
-                                text: `🗓 วันที่: ${date}`, 
-                                wrap: true, 
-                                color: "#666666", 
-                                size: "sm", 
-                                margin: "md" 
-                            },
-                            { 
-                                type: "text", 
-                                text: `📍 สถานที่: ${location}`, 
-                                wrap: true, 
-                                color: "#666666", 
-                                size: "sm", 
-                                margin: "md" 
-                            }
-                        ]
-                    },
-                    styles: {
-                        header: {
-                            separator: false
-                        }
-                    }
-                };
-
-                if (hasButton && buttonUrl) {
-                    bubble.footer = {
-                        type: "box",
-                        layout: "vertical",
-                        spacing: "sm",
-                        backgroundColor: "#ffffff",
-                        paddingAll: "15px",
-                        contents: [{
-                            type: "button",
-                            action: { 
-                                type: "uri", 
-                                label: buttonLabel, 
-                                uri: buttonUrl 
-                            },
-                            style: "primary",
-                            color: buttonColor,
-                            height: "sm"
-                        }]
-                    };
-                    
-                    bubble.styles.footer = {
-                        separator: true
-                    };
-                }
-                
-                // For LINE messaging API format (with type and altText)
-                const messagingApiFormat = {
-                    type: "flex", 
-                    altText: announcementTitle, 
-                    contents: bubble
-                };
-                
-                // For Flex Message Simulator compatibility - just output the bubble directly
-                jsonResult.value = JSON.stringify(bubble, null, 2);
-                
-                // Switch to JSON tab
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                
-                document.querySelector('.tab[data-tab="json"]').classList.add('active');
-                document.getElementById('json-content').classList.add('active');
-            });
-            
-            // Copy JSON button
-            const copyButton = document.getElementById('copyButton');
-            const copySuccess = document.getElementById('copySuccess');
-            
-            copyButton.addEventListener('click', function() {
-                jsonResult.select();
-                document.execCommand('copy');
-                
-                copySuccess.style.display = 'block';
-                setTimeout(function() {
-                    copySuccess.style.display = 'none';
-                }, 3000);
-            });
-            
-            // Initial preview update
+            // Update preview when template is changed
             updatePreview();
         });
+    });
+    
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and contents
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            tab.classList.add('active');
+            document.getElementById(tabId + '-content').classList.add('active');
+            
+            // If preview tab, update preview
+            if (tabId === 'preview') {
+                updatePreview();
+            } else if (tabId === 'json') {
+                generateJSON();
+            }
+        });
+    });
+    
+    // Color picker synchronization functions
+    function setupColorPicker(colorId, textId) {
+        const colorPicker = document.getElementById(colorId);
+        const colorText = document.getElementById(textId);
+        
+        colorPicker.addEventListener('input', () => {
+            colorText.value = colorPicker.value;
+            updatePreview();
+        });
+        
+        colorText.addEventListener('input', () => {
+            // Validate hex color format
+            if (/^#[0-9A-F]{6}$/i.test(colorText.value)) {
+                colorPicker.value = colorText.value;
+                updatePreview();
+            }
+        });
+    }
+    
+    // Setup all color pickers
+    setupColorPicker('headerColor', 'headerColorText');
+    setupColorPicker('bodyTitleColor', 'bodyTitleColorText');
+    setupColorPicker('bodyColor', 'bodyColorText');
+    setupColorPicker('buttonColor', 'buttonColorText');
+    setupColorPicker('template2-headerColor', 'template2-headerColorText');
+    setupColorPicker('template2-buttonColor', 'template2-buttonColorText');
+    
+    // Handle checkbox for button visibility in template 1
+    const hasButtonCheckbox = document.getElementById('hasButton');
+    const buttonUrlContainer = document.getElementById('buttonUrlContainer');
+    
+    hasButtonCheckbox.addEventListener('change', () => {
+        buttonUrlContainer.style.display = hasButtonCheckbox.checked ? 'block' : 'none';
+        document.getElementById('preview-footer').style.display = hasButtonCheckbox.checked ? 'block' : 'none';
+        updatePreview();
+    });
+    
+    // Handle checkbox for action URL in template 3
+    const hasActionCheckbox = document.getElementById('template3-hasAction');
+    const actionUrlContainer = document.getElementById('template3-actionUrlContainer');
+    
+    hasActionCheckbox.addEventListener('change', () => {
+        actionUrlContainer.style.display = hasActionCheckbox.checked ? 'block' : 'none';
+        updatePreview();
+    });
+    
+    // Live preview update when form inputs change
+    const allInputs = document.querySelectorAll('input, textarea, select');
+    allInputs.forEach(input => {
+        input.addEventListener('input', updatePreview);
+    });
+    
+    // Function to update preview based on current template
+    function updatePreview() {
+        switch(currentTemplate) {
+            case 'template1':
+                updateTemplate1Preview();
+                break;
+            case 'template2':
+                updateTemplate2Preview();
+                break;
+            case 'template3':
+                updateTemplate3Preview();
+                break;
+        }
+    }
+    
+    // Update preview for Template 1
+    function updateTemplate1Preview() {
+        // Update header
+        const previewHeader = document.getElementById('preview-header');
+        previewHeader.style.backgroundColor = document.getElementById('headerColor').value;
+        
+        // Update logo
+        document.getElementById('preview-logo-img').src = document.getElementById('logoUrl').value;
+        
+        // Update titles
+        document.getElementById('preview-title').textContent = document.getElementById('schoolName').value;
+        document.getElementById('preview-subtitle').textContent = document.getElementById('announcementTitle').value;
+        
+        // Update hero image
+        document.getElementById('preview-hero-img').src = document.getElementById('imageUrl').value;
+        
+        // Update body
+        const previewBody = document.getElementById('preview-body');
+        previewBody.style.backgroundColor = document.getElementById('bodyColor').value;
+        
+        // Update body title
+        const previewBodyTitle = document.getElementById('preview-body-title');
+        previewBodyTitle.textContent = document.getElementById('bodyTitle').value;
+        previewBodyTitle.style.color = document.getElementById('bodyTitleColor').value;
+        
+        // Update description
+        document.getElementById('preview-description').textContent = document.getElementById('description').value;
+        
+        // Update metadata
+        document.getElementById('preview-date').textContent = '🗓 วันที่: ' + document.getElementById('date').value;
+        document.getElementById('preview-location').textContent = '📍 สถานที่: ' + document.getElementById('location').value;
+        
+        // Update button
+        const previewFooter = document.getElementById('preview-footer');
+        const previewButton = document.getElementById('preview-button');
+        
+        if (document.getElementById('hasButton').checked) {
+            previewFooter.style.display = 'block';
+            previewButton.textContent = document.getElementById('buttonLabel').value;
+            previewButton.style.backgroundColor = document.getElementById('buttonColor').value;
+        } else {
+            previewFooter.style.display = 'none';
+        }
+    }
+    
+    // Update preview for Template 2
+    function updateTemplate2Preview() {
+        // Update header
+        const previewHeader = document.getElementById('preview-header-template2');
+        previewHeader.style.backgroundColor = document.getElementById('template2-headerColor').value;
+        
+        // Update titles
+        document.getElementById('preview-title-template2').textContent = document.getElementById('template2-headerTitle').value;
+        document.getElementById('preview-subtitle-template2').textContent = document.getElementById('template2-orgName').value;
+        
+        // Update hero image
+        document.getElementById('preview-hero-img-template2').src = document.getElementById('template2-imageUrl').value;
+        
+        // Update event details
+        document.getElementById('event-name-template2').textContent = 'ชื่องาน: ' + document.getElementById('template2-eventName').value;
+        
+        // Update metadata
+        document.getElementById('preview-date-location-template2').innerHTML = 'วันที่: ' + document.getElementById('template2-date').value + 
+            '<br>สถานที่: ' + document.getElementById('template2-location').value;
+        
+        // Update description
+        document.getElementById('preview-description-template2').textContent = 'รายละเอียด: ' + document.getElementById('template2-description').value;
+        
+        // Update button
+        const previewButton = document.getElementById('preview-button-template2');
+        previewButton.textContent = document.getElementById('template2-buttonLabel').value;
+        previewButton.style.backgroundColor = document.getElementById('template2-buttonColor').value;
+    }
+    
+    // Update preview for Template 3
+    function updateTemplate3Preview() {
+        // Update image
+        document.getElementById('preview-hero-img-template3').src = document.getElementById('template3-imageUrl').value;
+        
+        // Update aspect ratio
+        const aspectRatio = document.getElementById('template3-aspectRatio').value;
+        const previewTemplate3 = document.getElementById('preview-template3');
+        
+        switch(aspectRatio) {
+            case '1:1':
+                previewTemplate3.style.height = '350px';
+                break;
+            case '4:3':
+                previewTemplate3.style.height = '262px';
+                break;
+            case '16:9':
+                previewTemplate3.style.height = '197px';
+                break;
+            case '4:5':
+                previewTemplate3.style.height = '437px';
+                break;
+        }
+    }
+    
+    // Generate button click handler
+    document.getElementById('generateButton').addEventListener('click', generateJSON);
+    
+    // Copy button click handler
+    document.getElementById('copyButton').addEventListener('click', () => {
+        const jsonResult = document.getElementById('jsonResult');
+        jsonResult.select();
+        document.execCommand('copy');
+        
+        const copySuccess = document.getElementById('copySuccess');
+        copySuccess.style.display = 'block';
+        setTimeout(() => {
+            copySuccess.style.display = 'none';
+        }, 2000);
+    });
+    
+    // Generate JSON function
+    function generateJSON() {
+        let jsonOutput = '';
+        
+        switch(currentTemplate) {
+            case 'template1':
+                jsonOutput = generateTemplate1JSON();
+                break;
+            case 'template2':
+                jsonOutput = generateTemplate2JSON();
+                break;
+            case 'template3':
+                jsonOutput = generateTemplate3JSON();
+                break;
+        }
+        
+        document.getElementById('jsonResult').value = jsonOutput;
+    }
+    
+    // Generate JSON for Template 1
+    function generateTemplate1JSON() {
+        const hasButton = document.getElementById('hasButton').checked;
+        
+        const jsonObj = {
+            "type": "flex",
+            "altText": document.getElementById('announcementTitle').value,
+            "contents": {
+                "type": "bubble",
+                "header": {
+                    "type": "box",
+                    "layout": "horizontal",
+                    "backgroundColor": document.getElementById('headerColor').value,
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "width": "20%",
+                            "contents": [
+                                {
+                                    "type": "image",
+                                    "url": document.getElementById('logoUrl').value,
+                                    "size": "full",
+                                    "aspectMode": "fit",
+                                    "align": "center"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "width": "80%",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": document.getElementById('schoolName').value,
+                                    "weight": "bold",
+                                    "size": "lg",
+                                    "color": "#ffffff"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": document.getElementById('announcementTitle').value,
+                                    "weight": "regular",
+                                    "size": "sm",
+                                    "color": "#ffffff"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "hero": {
+                    "type": "image",
+                    "url": document.getElementById('imageUrl').value,
+                    "size": "full",
+                    "aspectRatio": "16:9",
+                    "aspectMode": "cover"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": document.getElementById('bodyColor').value,
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": document.getElementById('bodyTitle').value,
+                            "weight": "bold",
+                            "size": "lg",
+                            "color": document.getElementById('bodyTitleColor').value
+                        },
+                        {
+                            "type": "separator",
+                            "color": document.getElementById('bodyTitleColor').value
+                        },
+                        {
+                            "type": "text",
+                            "text": document.getElementById('description').value,
+                            "wrap": true,
+                            "margin": "md"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "md",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "🗓 วันที่: " + document.getElementById('date').value,
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "📍 สถานที่: " + document.getElementById('location').value,
+                                    "size": "sm"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        };
+        
+        // Add button if checked
+        if (hasButton) {
+            jsonObj.contents.footer = {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": document.getElementById('buttonLabel').value,
+                            "uri": document.getElementById('buttonUrl').value
+                        },
+                        "style": "primary",
+                        "color": document.getElementById('buttonColor').value
+                    }
+                ]
+            };
+        }
+        
+        return JSON.stringify(jsonObj, null, 2);
+    }
+    
+    // Generate JSON for Template 2
+    function generateTemplate2JSON() {
+        const jsonObj = {
+            "type": "flex",
+            "altText": document.getElementById('template2-headerTitle').value + " - " + document.getElementById('template2-eventName').value,
+            "contents": {
+                "type": "bubble",
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": document.getElementById('template2-headerColor').value,
+                    "paddingAll": "15px",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": document.getElementById('template2-headerTitle').value,
+                            "weight": "bold",
+                            "size": "xl",
+                            "color": "#ffffff"
+                        },
+                        {
+                            "type": "text",
+                            "text": document.getElementById('template2-orgName').value,
+                            "size": "md",
+                            "color": "#ffffff",
+                            "margin": "md"
+                        }
+                    ]
+                },
+                "hero": {
+                    "type": "image",
+                    "url": document.getElementById('template2-imageUrl').value,
+                    "size": "full",
+                    "aspectRatio": "16:9",
+                    "aspectMode": "cover"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "ชื่องาน: " + document.getElementById('template2-eventName').value,
+                            "weight": "bold",
+                            "size": "lg"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "md",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "วันที่: " + document.getElementById('template2-date').value,
+                                    "size": "md"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "สถานที่: " + document.getElementById('template2-location').value,
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": "รายละเอียด: " + document.getElementById('template2-description').value,
+                            "wrap": true,
+                            "margin": "md"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": document.getElementById('template2-buttonLabel').value,
+                                "uri": document.getElementById('template2-buttonUrl').value
+                            },
+                            "style": "primary",
+                            "color": document.getElementById('template2-buttonColor').value
+                        }
+                    ]
+                }
+            }
+        };
+        
+        return JSON.stringify(jsonObj, null, 2);
+    }
+    
+    // Generate JSON for Template 3
+    function generateTemplate3JSON() {
+        const hasAction = document.getElementById('template3-hasAction').checked;
+        const aspectRatio = document.getElementById('template3-aspectRatio').value;
+        
+        const jsonObj = {
+            "type": "flex",
+            "altText": "รูปภาพ",
+            "contents": {
+                "type": "bubble",
+                "size": "mega",
+                "hero": {
+                    "type": "image",
+                    "url": document.getElementById('template3-imageUrl').value,
+                    "size": "full",
+                    "aspectRatio": aspectRatio,
+                    "aspectMode": "cover"
+                }
+            }
+        };
+        
+        // Add action if checked
+        if (hasAction) {
+            jsonObj.contents.hero.action = {
+                "type": "uri",
+                "uri": document.getElementById('template3-actionUrl').value
+            };
+        }
+        
+        return JSON.stringify(jsonObj, null, 2);
+    }
+    
+    // Initial update of preview
+    updatePreview();
+});
     </script>
 </body>
 </html>
