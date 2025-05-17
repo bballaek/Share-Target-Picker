@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced LINE Flex Message Generator</title>
+    <style>
+        body {
+            font-family: 'Prompt', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #004080;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="url"], textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: border 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="url"]:focus, textarea:focus, select:focus {
+            border-color: #004080;
+            outline: none;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 15px 20px;
+            background-color: #004080;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,64,128,0.2);
+        }
+        button:hover {
+            background-color: #003070;
+        }
+        .hidden {
+            display: none;
+        }
+        #resultContainer {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #jsonResult {
+            width: 100%;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .preview-container {
+            margin-top: 30px;
+        }
+        .flex-preview {
+            width: 350px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .preview-header {
+            background-color: #004080;
+            color: white;
+            padding: 12px;
+            display: flex;
+        }
+        .preview-logo {
+            width: 20%;
+        }
+        .preview-logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .preview-header-text {
+            width: 80%;
+            padding-left: 10px;
+        }
+        .preview-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .preview-subtitle {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .preview-hero img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        .preview-body {
+            padding: 15px;
+            background-color: #f7f7f7;
+        }
+        .preview-body-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #004080;
+        }
+        .preview-separator {
+            height: 2px;
+            background-color: #004080;
+            margin: 8px 0;
+        }
+        .preview-description {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .preview-metadata {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        .preview-footer {
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .preview-button {
+            background-color: #004080;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #004080;
+            color: white;
+            border-color: #004080;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+        }
+        .color-picker input[type="color"] {
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .color-text {
+            flex: 1;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enhanced LINE Flex Message Generator</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="editor">แบบฟอร์ม</div>
+            <div class="tab" data-tab="preview">ตัวอย่าง</div>
+            <div class="tab" data-tab="json">JSON Output</div>
+        </div>
+        
+        <div class="success-message" id="copySuccess">คัดลอก JSON สำเร็จ!</div>
+        
+        <div class="alert-info" style="background-color: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <strong>หมายเหตุ:</strong> ระบบจะสร้าง JSON ในรูปแบบที่เข้ากับ LINE Flex Message Simulator โดยตรง
+        </div>
+        
+        <div class="tab-content active" id="editor-content">
+            <form id="flex-form">
+                <div class="form-group">
+                    <label for="schoolName">ชื่อโรงเรียน/องค์กร</label>
+                    <input type="text" id="schoolName" value="Saint Gabriel's College" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="announcementTitle">หัวข้อประกาศ</label>
+                    <input type="text" id="announcementTitle" value="ประกาศห้องเรียน ม.1/7" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="headerColor">สีพื้นหลังส่วนหัว</label>
+                    <div class="color-picker">
+                        <input type="color" id="headerColor" value="#004080">
+                        <input type="text" id="headerColorText" class="color-text" value="#004080">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="logoUrl">ลิงก์รูปโลโก้</label>
+                    <input type="url" id="logoUrl" value="https://drive.google.com/uc?id=1C02hu9hkyh7xmG1iRjw3jG9u33Z0s2w9" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="imageUrl">ลิงก์รูปภาพหลัก</label>
+                    <input type="url" id="imageUrl" value="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bodyTitle">หัวข้อเนื้อหา</label>
+                    <input type="text" id="bodyTitle" value="รายละเอียดประกาศ" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bodyTitleColor">สีหัวข้อเนื้อหา</label>
+                    <div class="color-picker">
+                        <input type="color" id="bodyTitleColor" value="#004080">
+                        <input type="text" id="bodyTitleColorText" class="color-text" value="#004080">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">รายละเอียด</label>
+                    <textarea id="description" rows="4" required>ใส่รายละเอียดข่าวสารที่ต้องการประกาศที่นี่ เช่น กิจกรรม, กำหนดการ, ข้อมูลสำคัญ</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bodyColor">สีพื้นหลังส่วนเนื้อหา</label>
+                    <div class="color-picker">
+                        <input type="color" id="bodyColor" value="#f7f7f7">
+                        <input type="text" id="bodyColorText" class="color-text" value="#f7f7f7">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">วันที่</label>
+                    <input type="text" id="date" value="16 พฤษภาคม 2568">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">สถานที่</label>
+                    <input type="text" id="location" value="อาคารเรียน Saint Gabriel's College">
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="hasButton" checked>
+                    <label for="hasButton">เพิ่มปุ่มรายละเอียดเพิ่มเติม</label>
+                </div>
+                
+                <div id="buttonUrlContainer">
+                    <div class="form-group">
+                        <label for="buttonLabel">ข้อความบนปุ่ม</label>
+                        <input type="text" id="buttonLabel" value="รายละเอียดเพิ่มเติม">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="buttonUrl">URL สำหรับปุ่ม</label>
+                        <input type="url" id="buttonUrl" value="https://example.com/more-details">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="buttonColor">สีปุ่ม</label>
+                        <div class="color-picker">
+                            <input type="color" id="buttonColor" value="#004080">
+                            <input type="text" id="buttonColorText" class="color-text" value="#004080">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" id="generateButton">สร้าง Flex Message</button>
+            </form>
+        </div>
+        
+        <div class="tab-content" id="preview-content">
+            <div class="flex-preview">
+                <div class="preview-header" id="preview-header">
+                    <div class="preview-logo">
+                        <img id="preview-logo-img" src="https://share-target-picker.vercel.app/img/logo.png" alt="Logo">
+
+                    </div>
+                    <div class="preview-header-text">
+                        <div class="preview-title" id="preview-title">Saint Gabriel's College</div>
+                        <div class="preview-subtitle" id="preview-subtitle">ประกาศห้องเรียน ม.1/7</div>
+                    </div>
+                </div>
+                
+                <div class="preview-hero">
+                    <img id="preview-hero-img" src="https://drive.google.com/uc?id=1BaUzB_y8eZcAjNw6rk3stnwOcwihevof" alt="Hero Image">
+                </div>
+                
+                <div class="preview-body" id="preview-body">
+                    <div class="preview-body-title" id="preview-body-title">รายละเอียดประกาศ</div>
+                    <div class="preview-separator"></div>
+                    <div class="preview-description" id="preview-description">ใส่รายละเอียดข่าวสารที่ต้องการประกาศที่นี่ เช่น กิจกรรม, กำหนดการ, ข้อมูลสำคัญ</div>
+                    <div class="preview-metadata">
+                        <div id="preview-date">🗓 วันที่: 16 พฤษภาคม 2568</div>
+                        <div id="preview-location">📍 สถานที่: อาคารเรียน Saint Gabriel's College</div>
+                    </div>
+                </div>
+                
+                <div class="preview-footer" id="preview-footer">
+                    <div class="preview-button" id="preview-button">รายละเอียดเพิ่มเติม</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="json-content">
+            <textarea id="jsonResult" readonly rows="15"></textarea>
+            <button id="copyButton">คัดลอก JSON</button>
+        </div>
+    </div>
+  
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(tabId + '-content').classList.add('active');
+                });
+            });
+            
+            // Color picker synchronization
+            function setupColorPicker(colorId, textId) {
+                const colorPicker = document.getElementById(colorId);
+                const textInput = document.getElementById(textId);
+                
+                colorPicker.addEventListener('input', function() {
+                    textInput.value = this.value;
+                    updatePreview();
+                });
+                
+                textInput.addEventListener('input', function() {
+                    colorPicker.value = this.value;
+                    updatePreview();
+                });
+            }
+            
+            setupColorPicker('headerColor', 'headerColorText');
+            setupColorPicker('bodyTitleColor', 'bodyTitleColorText');
+            setupColorPicker('bodyColor', 'bodyColorText');
+            setupColorPicker('buttonColor', 'buttonColorText');
+            
+            // Button visibility toggle
+            const hasButtonCheckbox = document.getElementById('hasButton');
+            const buttonUrlContainer = document.getElementById('buttonUrlContainer');
+            const previewFooter = document.getElementById('preview-footer');
+            
+            hasButtonCheckbox.addEventListener('change', function() {
+                buttonUrlContainer.style.display = this.checked ? 'block' : 'none';
+                previewFooter.style.display = this.checked ? 'block' : 'none';
+                updatePreview();
+            });
+            
+            // Initial form input setup
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
+            });
+            
+            // Preview update function
+            function updatePreview() {
+                // Header
+                const headerColor = document.getElementById('headerColor').value;
+                document.getElementById('preview-header').style.backgroundColor = headerColor;
+                
+                document.getElementById('preview-logo-img').src = document.getElementById('logoUrl').value;
+                document.getElementById('preview-title').textContent = document.getElementById('schoolName').value;
+                document.getElementById('preview-subtitle').textContent = document.getElementById('announcementTitle').value;
+                
+                // Hero
+                document.getElementById('preview-hero-img').src = document.getElementById('imageUrl').value;
+                
+                // Body
+                const bodyColor = document.getElementById('bodyColor').value;
+                document.getElementById('preview-body').style.backgroundColor = bodyColor;
+                
+                document.getElementById('preview-body-title').textContent = document.getElementById('bodyTitle').value;
+                document.getElementById('preview-body-title').style.color = document.getElementById('bodyTitleColor').value;
+                
+                document.getElementById('preview-description').textContent = document.getElementById('description').value;
+                document.getElementById('preview-date').textContent = `🗓 วันที่: ${document.getElementById('date').value}`;
+                document.getElementById('preview-location').textContent = `📍 สถานที่: ${document.getElementById('location').value}`;
+                
+                // Footer/Button
+                const hasButton = document.getElementById('hasButton').checked;
+                previewFooter.style.display = hasButton ? 'block' : 'none';
+                
+                if (hasButton) {
+                    document.getElementById('preview-button').textContent = document.getElementById('buttonLabel').value;
+                    document.getElementById('preview-button').style.backgroundColor = document.getElementById('buttonColor').value;
+                }
+            }
+            
+            // Generate JSON function
+            const generateButton = document.getElementById('generateButton');
+            const jsonResult = document.getElementById('jsonResult');
+            
+            generateButton.addEventListener('click', function() {
+                const schoolName = document.getElementById('schoolName').value;
+                const announcementTitle = document.getElementById('announcementTitle').value;
+                const headerColor = document.getElementById('headerColor').value;
+                const logoUrl = document.getElementById('logoUrl').value;
+                const imageUrl = document.getElementById('imageUrl').value;
+                const bodyTitle = document.getElementById('bodyTitle').value;
+                const bodyTitleColor = document.getElementById('bodyTitleColor').value;
+                const description = document.getElementById('description').value;
+                const bodyColor = document.getElementById('bodyColor').value;
+                const date = document.getElementById('date').value;
+                const location = document.getElementById('location').value;
+                const hasButton = hasButtonCheckbox.checked;
+                const buttonLabel = document.getElementById('buttonLabel').value;
+                const buttonUrl = document.getElementById('buttonUrl').value;
+                const buttonColor = document.getElementById('buttonColor').value;
+
+                // Create the bubble object first (for Flex Message Simulator compatibility)
+                const bubble = {
+                    type: "bubble",
+                    header: {
+                        type: "box",
+                        layout: "horizontal",
+                        backgroundColor: headerColor,
+                        paddingAll: "12px",
+                        contents: [
+                            {
+                                type: "box",
+                                layout: "vertical",
+                                width: "20%",
+                                contents: [{ 
+                                    type: "image", 
+                                    url: logoUrl, 
+                                    size: "sm", 
+                                    aspectRatio: "1:1", 
+                                    aspectMode: "fit" 
+                                }]
+                            },
+                            {
+                                type: "box",
+                                layout: "vertical",
+                                width: "80%",
+                                paddingStart: "10px",
+                                contents: [
+                                    { 
+                                        type: "text", 
+                                        text: schoolName, 
+                                        weight: "bold", 
+                                        size: "lg", 
+                                        color: "#ffffff" 
+                                    },
+                                    { 
+                                        type: "text", 
+                                        text: announcementTitle, 
+                                        size: "sm", 
+                                        color: "#ffffff", 
+                                        margin: "sm" 
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    hero: { 
+                        type: "image", 
+                        url: imageUrl, 
+                        size: "full", 
+                        aspectRatio: "4:5", 
+                        aspectMode: "cover" 
+                    },
+                    body: {
+                        type: "box",
+                        layout: "vertical",
+                        backgroundColor: bodyColor,
+                        paddingAll: "15px",
+                        spacing: "md",
+                        contents: [
+                            { 
+                                type: "text", 
+                                text: bodyTitle, 
+                                weight: "bold", 
+                                size: "lg", 
+                                wrap: true, 
+                                color: bodyTitleColor 
+                            },
+                            { 
+                                type: "separator", 
+                                color: bodyTitleColor, 
+                                margin: "sm" 
+                            },
+                            { 
+                                type: "text", 
+                                text: description, 
+                                wrap: true, 
+                                size: "md", 
+                                color: "#666666", 
+                                margin: "md" 
+                            },
+                            { 
+                                type: "text", 
+                                text: `🗓 วันที่: ${date}`, 
+                                wrap: true, 
+                                color: "#666666", 
+                                size: "sm", 
+                                margin: "md" 
+                            },
+                            { 
+                                type: "text", 
+                                text: `📍 สถานที่: ${location}`, 
+                                wrap: true, 
+                                color: "#666666", 
+                                size: "sm", 
+                                margin: "md" 
+                            }
+                        ]
+                    },
+                    styles: {
+                        header: {
+                            separator: false
+                        }
+                    }
+                };
+
+                if (hasButton && buttonUrl) {
+                    bubble.footer = {
+                        type: "box",
+                        layout: "vertical",
+                        spacing: "sm",
+                        backgroundColor: "#ffffff",
+                        paddingAll: "15px",
+                        contents: [{
+                            type: "button",
+                            action: { 
+                                type: "uri", 
+                                label: buttonLabel, 
+                                uri: buttonUrl 
+                            },
+                            style: "primary",
+                            color: buttonColor,
+                            height: "sm"
+                        }]
+                    };
+                    
+                    bubble.styles.footer = {
+                        separator: true
+                    };
+                }
+                
+                // For LINE messaging API format (with type and altText)
+                const messagingApiFormat = {
+                    type: "flex", 
+                    altText: announcementTitle, 
+                    contents: bubble
+                };
+                
+                // For Flex Message Simulator compatibility - just output the bubble directly
+                jsonResult.value = JSON.stringify(bubble, null, 2);
+                
+                // Switch to JSON tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                document.querySelector('.tab[data-tab="json"]').classList.add('active');
+                document.getElementById('json-content').classList.add('active');
+            });
+            
+            // Copy JSON button
+            const copyButton = document.getElementById('copyButton');
+            const copySuccess = document.getElementById('copySuccess');
+            
+            copyButton.addEventListener('click', function() {
+                jsonResult.select();
+                document.execCommand('copy');
+                
+                copySuccess.style.display = 'block';
+                setTimeout(function() {
+                    copySuccess.style.display = 'none';
+                }, 3000);
+            });
+            
+            // Initial preview update
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
